@@ -1,24 +1,39 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
+const Url = require('./models/url')
+const { createUrl, getUrl } = require('./controllers/urlController')
 const app = express();
 
-// Basic Configuration
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+const MONGO_URI = process.env.MONGO_URI;
+mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true },
+    (err) => {
+        if (err) throw err;
+        console.log("Succesfully connected to db!");
+    });
 
+// logger                                                                            
+app.use((req, _, next) => {
+    console.log(`${req.method} ${req.path} - ${req.ip}`)
+    next();
+})
+
+app.use(cors());
 app.use('/public', express.static(`${process.cwd()}/public`));
 
-app.get('/', function(req, res) {
+
+app.get('/', (req, res) => {
     res.sendFile(process.cwd() + '/views/index.html');
 });
 
-// Your first API endpoint
-app.get('/api/hello', function(req, res) {
-    res.json({ greeting: 'hello API' });
-});
+// API
+app.post('/api/create-url', createUrl);
 
-app.listen(port, function() {
+app.get('/api/get-url/:url', getUrl);
+
+app.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });
