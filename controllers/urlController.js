@@ -26,4 +26,11 @@ const getUrl = async (req, res) => {
     else res.json({ error: "Url not found" });
 }
 
-module.exports = { createUrl, getUrl }
+const redirectController = async (req, res) => {
+    console.log(`In redirectController! url is: ${req.url.substring(1)}`);
+    let url = await Url.findOne({ original_url: req.params.url });
+    if (url) res.redirect(url.original_url);
+    else res.json({ error: "Url not found" });
+}
+
+module.exports = { createUrl, getUrl, redirectController }
