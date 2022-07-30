@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const Url = require('./models/url')
-const { createUrl, getUrl, redirectController } = require('./controllers/urlController')
+const { createUrl, getUrlByHash, redirectController } = require('./controllers/urlController')
 const app = express();
 
 const port = process.env.PORT || 3000;
@@ -38,7 +38,7 @@ app.get(SHORTENED_URL_REGEX, redirectController);
 // API
 app.post('/api/create-url', createUrl);
 
-app.get('/api/get-url/:url', getUrl);
+app.get('/api/get-url/:url', getUrlByHash);
 
 
 
