@@ -18,14 +18,16 @@
 <body>
     <h1 class="display-1 shortener-title"><b>Url shortener</b></h1>
     <div class="shadow card">
-        <form>
-            <div class="input-group mb-3">
-                <input placeholder="Enter your url" type="url" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+        <form id="main-form" class="url-form form-floating" action="/api/create-url" method="POST">
+            <div class="url-input input-group mb-3">
+                <input name="new_url" placeholder="Enter your url" type="url" class="form-control" id="basic-url"
+                    aria-describedby="basic-addon3">
+                <button id="url-sbm" type="submit" class="btn btn-primary submit-url">shorten!</button>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
 
 </body>
+<script src="public/home.js"> </script>
 
 </html>

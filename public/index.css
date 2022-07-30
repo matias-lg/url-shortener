@@ -1,14 +1,28 @@
-* {
+.shortener-title {
     font-family: Iosevka;
+    margin-bottom: 5%;
 }
 
 body {
    background-color: #F8EFD4 !important;
 }
 
+.url-form {
+    margin: 1em;
+}
+
+.url-input {
+    width: 50% !important;
+}
+
 .shortener-title {
     padding-top: 8%;
     text-align: center;
+}
+
+.submit-url {
+    background-color: #125D98 !important;
+    border-color: #125D98 !important;
 }
 
 .card {
