@@ -1,0 +1,21 @@
+* {
+    font-family: Iosevka;
+}
+
+body {
+   background-color: #F8EFD4 !important;
+}
+
+.shortener-title {
+    padding-top: 8%;
+    text-align: center;
+}
+
+.card {
+    background-color: #EDC988 !important;
+    display: flex;
+    width: 50%;
+    margin: 0 auto;
+    float: none;
+    margin-bottom: 10px;
+}
