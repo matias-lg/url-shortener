@@ -1,15 +1,18 @@
 require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+
 const Url = require('./models/url')
 const { createUrl, getUrlByHash, redirectController } = require('./controllers/urlController')
-const app = express();
-
-const port = process.env.PORT || 3000;
 
 const MONGO_URI = process.env.MONGO_URI;
 const SHORTENED_URL_REGEX = /^\/[A-Za-z0-9]{5}$/;
+
+const app = express();
+const port = process.env.PORT || 3000;
 
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true },
     (err) => {
@@ -24,6 +27,8 @@ app.use((req, _, next) => {
 })
 
 app.use(cors());
+app.use(bodyParser());
+
 app.use('/public', express.static(`${process.cwd()}/public`));
 
 

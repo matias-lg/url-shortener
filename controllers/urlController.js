@@ -3,15 +3,15 @@ const crypto = require("crypto")
 const HASH_LENGTH = 5;
 
 const createUrl = async (req, res) => {
-    const new_url = req.new_url
+    const new_url = req.body.new_url;
     // check if url is a valid one
     let match = new_url.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
     if (match == null)
-        res.json({ error: `${new_url} is not a valid url` });
+        res.status(404).json({ error: `${new_url} is not a valid url` });
 
     existingUrl = await Url.findOne({ original_url: new_url });
     if (existingUrl)
-        res.json({ error: `${new_url} already exists` });
+        res.status(404).json({ error: `${new_url} was already shortened` });
 
     else {
         // since hashes are shortened to HASH_LENGTH characters there might be collisions
@@ -22,22 +22,23 @@ const createUrl = async (req, res) => {
             let exists = await Url.findOne({ shortened_url: hash });
             if (!exists) break;
         }
-        new Url({ original_url: req.query.new_url, shortened_url: hash }).save();
-        res.json({ original_url: req.query.new_url, shortened_url: `localhost:3000/${hash}` })
+        new Url({ original_url: new_url, shortened_url: hash }).save();
+        res.status(200).json({ original_url: req.query.new_url, shortened_url: hash })
     }
 }
 
 const getUrlByHash = async (req, res) => {
     let urlDoc = await Url.findOne({ shortened_url: req.params.url });
     if (urlDoc) res.json({ original_url: urlDoc.original_url, shortened_url: urlDoc.shortened_url });
-    else res.json({ error: "Url not found" });
+    else res.status(404).json({ error: "Url not found" });
 }
 
 const redirectController = async (req, res) => {
-    console.log(`In redirectController! url is: ${req.url.substring(1)}`);
+    let parsed_url = req.url.substring(1);
+    console.log(`In redirectController! url is: ${parsed_url}`);
     let url = await Url.findOne({ shortened_url: parsed_url });
     if (url) res.redirect(url.original_url);
-    else res.json({ error: "Url not found" });
+    else res.status(404).json({ error: "Url not found" });
 }
 
 module.exports = { createUrl, getUrlByHash, redirectController }
